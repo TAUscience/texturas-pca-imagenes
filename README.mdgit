@@ -1,0 +1,1 @@
+"# texturas-pca-imagenes"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/TAUscience/texturas-pca-imagenes.gitgit push -u origin main
