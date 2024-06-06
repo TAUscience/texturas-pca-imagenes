@@ -5,6 +5,8 @@ import nombres_imgs
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""#################### PROCEDIMIENTO PARA TEXTURAS ####################"""
+
 
 """#################### PROCEDIMIENTO PARA PCA ####################"""
 # Traer el conjunto de datos
