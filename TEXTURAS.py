@@ -3,35 +3,28 @@ import matplotlib.pyplot as plt
 from skimage import io, color
 
 def Q1(f, pixel):
-    filas, columnas = f.shape
-    x, y = pixel
+
+    y,x = pixel
     elementos_G = []
     
     # Hacia la derecha
-    if x < filas and y < columnas - 1:
-        elemento_G_x = f[x][y]
-        elemento_G_y = f[x][y + 1]
-        elementos_G.append([elemento_G_x, elemento_G_y])
-    else:
-        elementos_G.append([-1, -1])
+
+    elemento_G_x = f[y][x]
+    elemento_G_y = f[y][x + 1]
+    elementos_G.append([elemento_G_y, elemento_G_x])
+
+    # Hacia la izquierda
+
+    elemento_G_x = f[y][x]
+    elemento_G_y = f[y][x-1]
+    elementos_G.append([elemento_G_y, elemento_G_x])
+
+    elementos_G = np.array(elementos_G)
     
-    # Hacia abajo
-    if x < filas - 1 and y < columnas:
-        elemento_G_x = f[x][y]
-        elemento_G_y = f[x + 1][y]
-        elementos_G.append([elemento_G_x, elemento_G_y])
+    if np.all(elementos_G == elementos_G[0]):
+        return elementos_G[0]
     else:
-        elementos_G.append([-1, -1])
-    
-    # Hacia abajo a la izquierda
-    if x < filas - 1 and y > 0:
-        elemento_G_x = f[x][y]
-        elemento_G_y = f[x + 1][y - 1]
-        elementos_G.append([elemento_G_x, elemento_G_y])
-    else:
-        elementos_G.append([-1, -1])
-    
-    return elementos_G
+        return [-1, -1]
 
 def crear_G(f):
     elementos_maximo = np.max(f)
@@ -44,7 +37,7 @@ def padding_negativo(f):
     matriz_padded[1:-1, 1:-1] = f
     return matriz_padded
 
-def iterar_f(f):
+def co_ocurrenciaG(f):
     f_padded = padding_negativo(f)
     filas, columnas = f.shape
     G = crear_G(f_padded)
@@ -52,19 +45,67 @@ def iterar_f(f):
     for i in range(1, filas + 1):
         for j in range(1, columnas + 1):
             pixel = [i, j]
-            elementos_G = Q1(f_padded, pixel)
-            for elemento_G in elementos_G:
-                if elemento_G != [-1, -1]:
-                    G[elemento_G[0]][elemento_G[1]] += 1
+            elemento_G = Q1(f_padded, pixel)
+            if not np.array_equal(elemento_G, [-1, -1]):
+                G[elemento_G[0]][elemento_G[1]] += 1
 
     return G
 
-imagen = io.imread('img/conjuntoPequenoPruebas/img (0).jpg')
+def uniformidad(G):
+    return np.sum(G**2)
+
+def contraste(G):
+    filas, columnas = G.shape
+    contraste_suma = 0
+    for i in range(filas):
+        for j in range(columnas):
+            contraste_suma+= (i - j)**2 * G[i, j]
+    return contraste_suma
+
+def entropia(G):
+    G = np.array(G)
+    G = G[G > 0]
+    return -np.sum(G * np.log2(G))
+
+
+def normalizar_G(G):
+    total = np.sum(G)
+    if total != 0:
+        return G / total
+    else:
+        return G
+
+def homogeneidad(G):
+    filas, columnas = G.shape
+    homogeneidad_suma = 0
+    for i in range(filas):
+        for j in range(columnas):
+            homogeneidad_suma += G[i, j] / (1 + abs(i - j))
+    return homogeneidad_suma
+
+
+
+'''
+
+
+imagen = io.imread('img/conjuntoPequenoPruebas/img (1).jpg')
 matriz = color.rgb2gray(imagen) * 255
 
-G1 = iterar_f(matriz)
+G1 = co_ocurrenciaG(matriz)
 
-print(G1.shape)
+
+G1_normalizada = normalizar_G(G1)
+
+
+u = uniformidad(G1_normalizada)
+c= contraste(G1_normalizada)
+e = entropia(G1_normalizada)
+h = homogeneidad(G1_normalizada)
+
+print(f"Uniformidad: {u}")
+print(f"Contraste: {c}")
+print(f"Entropia: {e}")
+print(f"Homogeneidad: {h}")
 
 # Plotting the matrices
 fig, axes = plt.subplots(1, 2, figsize=(12, 6))
@@ -79,3 +120,7 @@ axes[1].set_title('Matriz G1 Resultante')
 
 plt.tight_layout()
 plt.show()
+
+
+
+'''
