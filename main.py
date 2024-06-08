@@ -1,11 +1,18 @@
 import PCAs
 import PP
+import TEXTURAS
 import nombres_imgs
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 """#################### PROCEDIMIENTO PARA TEXTURAS ####################"""
+# Traer el conjunto de datos
+array_3d = np.load('img/olivetti_faces.npy')
+#Traer las etiquetas
+etiquetas = np.load('img/olivetti_faces_target.npy')
+
+vector_caracteristicas_textura = TEXTURAS.vector_descriptores_textura(array_3d)
 
 
 """#################### PROCEDIMIENTO PARA PCA ####################"""

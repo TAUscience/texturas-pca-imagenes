@@ -81,7 +81,7 @@ def homogeneidad(G):
             homogeneidad_suma += G[i, j] / (1 + abs(i - j))
     return homogeneidad_suma
 
-def vector_descriptores(array_3d):
+def vector_descriptores_textura(array_3d):
 
     descriptores = []
     for  imagen_f in array_3d:
