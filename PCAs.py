@@ -19,7 +19,7 @@ def data_centrado_filas_instancias(array2d,media):
             datos_centrados[j][i]-=media[i]
     return datos_centrados
 
-def delta_instancias(array2d,media):
+def delta_instancias(array2d,media): #EQ 1.2.3
     variables,N=array2d.shape
     desviacion=np.zeros((variables,N))
     for i in range(N):
@@ -27,7 +27,7 @@ def delta_instancias(array2d,media):
     print("Desviación respecto a la media obtenida")
     return desviacion
         
-def matriz_covarianza(deltas):
+def matriz_covarianza(deltas): #EQ 1.2.4
     variables,N=deltas.shape
     matriz_covarianza=np.zeros((variables,variables))
     for i in range(N):
