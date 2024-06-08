@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from skimage import io, color
+#import matplotlib.pyplot as plt
+#from skimage import io, color
 
 def Q1(f, pixel):
 
@@ -28,7 +28,6 @@ def Q1(f, pixel):
 
 def crear_G(f):
     elementos_maximo = np.max(f)
-    print(elementos_maximo)
     return np.zeros((elementos_maximo + 1, elementos_maximo + 1))
 
 def padding_negativo(f):
@@ -67,7 +66,6 @@ def entropia(G):
     G = G[G > 0]
     return -np.sum(G * np.log2(G))
 
-
 def normalizar_G(G):
     total = np.sum(G)
     if total != 0:
@@ -83,9 +81,33 @@ def homogeneidad(G):
             homogeneidad_suma += G[i, j] / (1 + abs(i - j))
     return homogeneidad_suma
 
+def vector_descriptores(array_3d):
+
+    descriptores = []
+    for  imagen_f in array_3d:
+        G1 = co_ocurrenciaG(imagen_f*255)
+        G1_normalizada = normalizar_G(G1)
+        u = uniformidad(G1_normalizada)
+        c= contraste(G1_normalizada)
+        e = entropia(G1_normalizada)
+        h = homogeneidad(G1_normalizada)
+
+        descriptores.append([u,c,e,h])
+
+    descriptores = np.array(descriptores)
+    return descriptores
 
 
 '''
+array_3d = np.load('img/olivetti_faces.npy')
+#Traer las etiquetas
+etiquetas = np.load('img/olivetti_faces_target.npy')
+
+print(len(array_3d))
+
+descriptores = vector_descriptores(array_3d)
+
+print(descriptores[0,:])
 
 
 imagen = io.imread('img/conjuntoPequenoPruebas/img (1).jpg')
