@@ -58,7 +58,7 @@ def grafica_scree(valores_propios_ordenados,varianza_objetivo):
     plt.tight_layout()
     plt.show()
 
-    # Encontrar el número de componentes necesarios para explicar el 85% de la varianza
+    # Encontrar el número de componentes necesarios para explicar el objetivo% de la varianza
     num_componentes_objetivo = np.argmax(varianza_acumulada >= varianza_objetivo) + 1
 
     return num_componentes_objetivo

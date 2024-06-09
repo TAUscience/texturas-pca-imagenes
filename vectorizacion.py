@@ -1,21 +1,19 @@
 import PCAs
+import TEXTURAS
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-
-
-
-"""#################### PROCEDIMIENTO PARA PCA ####################"""
 # Traer el conjunto de datos
 array_3d = np.load('img/olivetti_faces.npy')
-# Visualizar algunas de las imágenes
-num_images_to_display = 3
-for i in range(num_images_to_display):
-    plt.imshow(array_3d[i], cmap='gray')
-    plt.title(f'Imagen {i+1}')
-    plt.show()
+"""#################### PROCEDIMIENTO PARA TEXTURAS ####################"""
+
+VECTOR_TEXTURA = TEXTURAS.vector_descriptores_textura(array_3d)
+# Guarda el arreglo en un archivo CSV
+np.savetxt('TEXTURAs.csv', VECTOR_TEXTURA, delimiter=',', fmt='%.5f')
+
+#################### PROCEDIMIENTO PARA PCA ####################
 
 # Representación del conjunto de datos en la forma de interés (EQ.1.2.1)
 array_2d = array_3d.reshape(array_3d.shape[0], -1).T
@@ -27,6 +25,7 @@ datos_centrados=PCAs.data_centrado_filas_instancias(array_2d,media)
 # Matriz de covarianza (EQ.1.2.4)
 S_covarianza=PCAs.matriz_covarianza(deltas_instancias)
 # Calcular los valores y vectores propios con numPy
+print("Calcilando vectores propios")
 valores_propios, vectores_propios = np.linalg.eig(S_covarianza)
 # Ordenar los vectores propios en función de los valores propios
 indices_ordenados = np.argsort(valores_propios)[::-1]
@@ -46,9 +45,6 @@ print(VECTOR_PCA.shape)
 
 # Guarda el arreglo en un archivo CSV
 np.savetxt('PCAs.csv', VECTOR_PCA, delimiter=',', fmt='%.5f')
-
-
-
 
 
 
